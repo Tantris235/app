@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wiadomki - szybki czat</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <header class="sidebar__header">
+          <div class="avatar">MN</div>
+          <div>
+            <h1>Wiadomki</h1>
+            <p>Online: 3 kontakty</p>
+          </div>
+        </header>
+        <div class="search">
+          <input type="search" placeholder="Szukaj lub rozpocznij nowy czat" />
+        </div>
+        <nav class="chat-list">
+          <button class="chat-list__item is-active" data-chat="0">
+            <div class="avatar">AL</div>
+            <div>
+              <h2>Ala Kowalska</h2>
+              <p>Możemy dziś pogadać?</p>
+            </div>
+            <span class="meta">12:41</span>
+          </button>
+          <button class="chat-list__item" data-chat="1">
+            <div class="avatar">KD</div>
+            <div>
+              <h2>Krzysiek D.</h2>
+              <p>Wysłałem brief.</p>
+            </div>
+            <span class="meta">11:09</span>
+          </button>
+          <button class="chat-list__item" data-chat="2">
+            <div class="avatar">ZA</div>
+            <div>
+              <h2>Zespół Apki</h2>
+              <p>Standup o 9:00.</p>
+            </div>
+            <span class="meta">Wczoraj</span>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="chat">
+        <header class="chat__header">
+          <div class="avatar">AL</div>
+          <div>
+            <h2>Ala Kowalska</h2>
+            <p>aktywny(-a) 3 min temu</p>
+          </div>
+          <div class="header-actions">
+            <button aria-label="Szukaj">🔎</button>
+            <button aria-label="Menu">⋮</button>
+          </div>
+        </header>
+
+        <section class="chat__body" id="chatBody">
+          <div class="bubble bubble--incoming">
+            <p>Cześć! Jak idzie projekt?</p>
+            <span>12:37</span>
+          </div>
+          <div class="bubble bubble--outgoing">
+            <p>Hej! Mam już makiety i plan wdrożenia.</p>
+            <span>12:39 ✓✓</span>
+          </div>
+          <div class="bubble bubble--incoming">
+            <p>Super, podeślij kiedy będziesz gotowy(-a).</p>
+            <span>12:40</span>
+          </div>
+          <div class="bubble bubble--outgoing">
+            <p>Wyślę link po lunchu.</p>
+            <span>12:41 ✓✓</span>
+          </div>
+        </section>
+
+        <form class="chat__composer" id="composer">
+          <button type="button" class="icon" aria-label="Dodaj załącznik">➕</button>
+          <button type="button" class="icon" aria-label="Dodaj emoji">😊</button>
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Napisz wiadomość"
+            autocomplete="off"
+          />
+          <button type="submit" class="send">Wyślij</button>
+        </form>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
