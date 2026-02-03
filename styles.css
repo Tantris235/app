@@ -60,6 +60,10 @@ body {
 .sidebar__header p {
   font-size: 13px;
   color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .avatar {
@@ -71,6 +75,21 @@ body {
   place-items: center;
   font-weight: 600;
   letter-spacing: 0.5px;
+}
+
+.status-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: rgba(134, 150, 160, 0.2);
+  color: var(--muted);
+}
+
+.status-pill.is-online {
+  background: rgba(37, 211, 102, 0.2);
+  color: #b7f7d1;
 }
 
 .search {
