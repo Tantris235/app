@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light dark;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #0b1320;
+  color: #f2f5f8;
+}
+
+.topbar {
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, #10263e, #164a7d);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.topbar h1 {
+  margin: 0;
+}
+
+.topbar p {
+  margin: 0.4rem 0 0;
+  opacity: 0.9;
+}
+
+.layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 320px;
+  height: calc(100vh - 100px);
+  padding: 1rem;
+}
+
+#map {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 500px;
+}
+
+.panel {
+  background: #111b2b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.weather-card p {
+  margin: 0.45rem 0;
+}
+
+.hint {
+  opacity: 0.85;
+}
+
+.error {
+  color: #ff8080;
+  margin-top: 0.8rem;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  #map {
+    height: 60vh;
+  }
+}
