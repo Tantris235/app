@@ -79,9 +79,10 @@
   }
 </style>
 
-<!-- Firebase SDK -->
+<!-- Firebase COMPAT SDK (IMPORTANT for GitHub Pages) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 </head>
 
 <body>
@@ -97,15 +98,22 @@
 </form>
 
 <script>
-// 🔥 TWOJA BAZA FIREBASE
+// ================= FIREBASE CONFIG =================
 const firebaseConfig = {
-  databaseURL: "https://chat-369c9-default-rtdb.europe-west1.firebasedatabase.app/"
+  apiKey: "AIzaSyAXURPcLmlpsr1VAfdyO94UIwSYWUUgEU4",
+  authDomain: "chat-369c9.firebaseapp.com",
+  databaseURL: "https://chat-369c9-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chat-369c9",
+  storageBucket: "chat-369c9.firebasestorage.app",
+  messagingSenderId: "600143131631",
+  appId: "1:600143131631:web:b5fd73a540ec93fabf7c1a"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const chatRef = db.ref("chat");
 
+// ================= UI =================
 const chat = document.getElementById("chat");
 const form = document.getElementById("form");
 const nickInput = document.getElementById("nick");
@@ -116,8 +124,8 @@ function scrollDown() {
 }
 
 function addMessage(nick, text) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "msg";
+  const msg = document.createElement("div");
+  msg.className = "msg";
 
   const n = document.createElement("div");
   n.className = "nick";
@@ -126,20 +134,20 @@ function addMessage(nick, text) {
   const t = document.createElement("div");
   t.textContent = text;
 
-  wrapper.appendChild(n);
-  wrapper.appendChild(t);
+  msg.appendChild(n);
+  msg.appendChild(t);
 
-  chat.appendChild(wrapper);
+  chat.appendChild(msg);
   scrollDown();
 }
 
-// 🔄 ODBIERANIE WIADOMOŚCI (REAL-TIME)
+// ================= REALTIME LISTENER =================
 chatRef.on("child_added", (snap) => {
   const data = snap.val();
   addMessage(data.nick, data.text);
 });
 
-// 📤 WYSYŁANIE WIADOMOŚCI
+// ================= SEND MESSAGE =================
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -168,4 +176,3 @@ msgInput.addEventListener("keydown", (e) => {
 
 </body>
 </html>
-t
