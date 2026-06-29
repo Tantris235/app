@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Chat</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #0f172a;
+      color: white;
+    }
+
+    header {
+      background: #1e293b;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .msg {
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+    .me {
+      background: #3b82f6;
+      align-self: flex-end;
+    }
+
+    .other {
+      background: #334155;
+      align-self: flex-start;
+    }
+
+    form {
+      display: flex;
+      padding: 10px;
+      background: #1e293b;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+  </style>
+</head>
+
+<body>
+  <header>💬 Simple Chat</header>
+
+  <div id="chat"></div>
+
+  <form id="form">
+    <input id="input" placeholder="Type a message..." autocomplete="off" />
+    <button>Send</button>
+  </form>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+
+    // load messages from localStorage
+    let messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+
+    function saveMessages() {
+      localStorage.setItem("chatMessages", JSON.stringify(messages));
+    }
+
+    function renderMessages() {
+      chat.innerHTML = "";
+      messages.forEach(msg => {
+        const div = document.createElement("div");
+        div.classList.add("msg", msg.type);
+        div.textContent = msg.text;
+        chat.appendChild(div);
+      });
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addMessage(text, type) {
+      messages.push({ text, type });
+      saveMessages();
+      renderMessages();
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, "me");
+      input.value = "";
+    });
+
+    renderMessages();
+  </script>
+</body>
+</html>
