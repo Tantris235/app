@@ -1,134 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simple Chat</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Firebase Live Chat</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: #0f172a;
-      color: white;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    header {
-      background: #1e293b;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
+  header {
+    padding: 14px;
+    text-align: center;
+    background: #1e293b;
+    font-weight: bold;
+  }
 
-    #chat {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+  #chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-    .msg {
-      padding: 10px;
-      border-radius: 10px;
-      max-width: 70%;
-      word-wrap: break-word;
-    }
+  .msg {
+    background: #334155;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 70%;
+  }
 
-    .me {
-      background: #3b82f6;
-      align-self: flex-end;
-    }
+  .nick {
+    font-size: 12px;
+    color: #38bdf8;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
 
-    .other {
-      background: #334155;
-      align-self: flex-start;
-    }
+  form {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    background: #1e293b;
+  }
 
-    form {
-      display: flex;
-      padding: 10px;
-      background: #1e293b;
-      gap: 10px;
-    }
+  input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 8px;
+    background: #0f172a;
+    color: white;
+  }
 
-    input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-    }
+  #nick { width: 140px; }
+  #message { flex: 1; }
 
-    button {
-      padding: 10px 15px;
-      border: none;
-      background: #22c55e;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+  button {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #22c55e;
+    color: white;
+    cursor: pointer;
+  }
 
-    button:hover {
-      background: #16a34a;
-    }
-  </style>
+  button:hover {
+    background: #16a34a;
+  }
+</style>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 
 <body>
-  <header>💬 Simple Chat</header>
 
-  <div id="chat"></div>
+<header>💬 Live Firebase Chat</header>
 
-  <form id="form">
-    <input id="input" placeholder="Type a message..." autocomplete="off" />
-    <button>Send</button>
-  </form>
+<div id="chat"></div>
 
-  <script>
-    const chat = document.getElementById("chat");
-    const form = document.getElementById("form");
-    const input = document.getElementById("input");
+<form id="form">
+  <input id="nick" placeholder="Nick" value="Gracz" maxlength="20"/>
+  <input id="message" placeholder="Message..." autocomplete="off"/>
+  <button type="submit">Send</button>
+</form>
 
-    // load messages from localStorage
-    let messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+<script>
+// 🔥 TWOJA BAZA FIREBASE
+const firebaseConfig = {
+  databaseURL: "https://chat-369c9-default-rtdb.europe-west1.firebasedatabase.app/"
+};
 
-    function saveMessages() {
-      localStorage.setItem("chatMessages", JSON.stringify(messages));
-    }
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const chatRef = db.ref("chat");
 
-    function renderMessages() {
-      chat.innerHTML = "";
-      messages.forEach(msg => {
-        const div = document.createElement("div");
-        div.classList.add("msg", msg.type);
-        div.textContent = msg.text;
-        chat.appendChild(div);
-      });
-      chat.scrollTop = chat.scrollHeight;
-    }
+const chat = document.getElementById("chat");
+const form = document.getElementById("form");
+const nickInput = document.getElementById("nick");
+const msgInput = document.getElementById("message");
 
-    function addMessage(text, type) {
-      messages.push({ text, type });
-      saveMessages();
-      renderMessages();
-    }
+function scrollDown() {
+  chat.scrollTop = chat.scrollHeight;
+}
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+function addMessage(nick, text) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "msg";
 
-      const text = input.value.trim();
-      if (!text) return;
+  const n = document.createElement("div");
+  n.className = "nick";
+  n.textContent = nick || "Gracz";
 
-      addMessage(text, "me");
-      input.value = "";
-    });
+  const t = document.createElement("div");
+  t.textContent = text;
 
-    renderMessages();
-  </script>
+  wrapper.appendChild(n);
+  wrapper.appendChild(t);
+
+  chat.appendChild(wrapper);
+  scrollDown();
+}
+
+// 🔄 ODBIERANIE WIADOMOŚCI (REAL-TIME)
+chatRef.on("child_added", (snap) => {
+  const data = snap.val();
+  addMessage(data.nick, data.text);
+});
+
+// 📤 WYSYŁANIE WIADOMOŚCI
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const nick = nickInput.value.trim() || "Gracz";
+  const text = msgInput.value.trim();
+  if (!text) return;
+
+  chatRef.push({
+    nick,
+    text,
+    time: Date.now()
+  });
+
+  msgInput.value = "";
+  scrollDown();
+});
+
+// ENTER SUPPORT
+msgInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    form.requestSubmit();
+  }
+});
+</script>
+
 </body>
 </html>
